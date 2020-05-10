@@ -1,16 +1,20 @@
 package main
 
 import (
-	"fmt"
+	"time"
 )
 
 const tSize = 4
 
 func main() {
-	t := Tetromino{shape2.shape, shape2.value, 0, 0}
+	f := Field{}
+	f.init().render()
 
-	t.moveDown()
+	ticker := time.Tick(time.Second)
 
-	fmt.Println(t)
+	for true {
+		<-ticker
+		f.render()
+	}
 
 }
