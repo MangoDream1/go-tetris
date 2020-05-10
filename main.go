@@ -1,12 +1,15 @@
 package main
 
 import (
+	"math/rand"
 	"time"
 )
 
 const tSize = 4
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	f := Field{}
 	f.init().render().placeCurrent()
 
