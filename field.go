@@ -18,12 +18,35 @@ type Field struct {
 	coming  []Tetromino
 }
 
-func tempPlaceCurrent(f *Field) [fieldHeight][fieldWidth]byte {
-	return f.state
+func (f *Field) removeCurrent() *Field {
+	x := int(f.current.x)
+	y := int(f.current.y)
+
+	for i, row := range f.current.shape {
+		for j, value := range row {
+			if !value {
+				continue
+			}
+
+			f.state[i+y][j+x] = byte(0)
+		}
+	}
+
+	return f
 }
 
 func (f *Field) placeCurrent() *Field {
-	f.state = tempPlaceCurrent(f)
+	x := int(f.current.x)
+	y := int(f.current.y)
+
+	for i, row := range f.current.shape {
+		for j, value := range row {
+			if value {
+				f.state[i+y][j+x] = f.current.value
+			}
+		}
+	}
+
 	return f
 }
 
@@ -31,7 +54,7 @@ func (f *Field) generateNew() *Field {
 	i := rand.Intn(len(shapes))
 	s := shapes[i]
 
-	f.coming = append(f.coming, Tetromino{s.shape, s.value, 0, 0})
+	f.coming = append(f.coming, Tetromino{s.shape, s.value, fieldWidth/2 - tSize/2, 0})
 
 	return f
 }
