@@ -59,24 +59,33 @@ func (f *Field) render() *Field {
 func _renderComing(f *Field) [][]byte {
 	output := make([][]byte, maxStored*(tSize+hortPadding))
 
-	for ti, t := range f.coming {
-		offset := ti * (tSize + hortPadding)
+	offset := 0
+	for _, t := range f.coming {
+		shapeHeight := 0
 
 		for i, row := range t.shape {
 			output[i+offset] = make([]byte, tSize)
 
+			counted := false
 			for j, value := range row {
 				if value {
 					output[i+offset][j+1] = t.value
-				}
 
+					if !counted {
+						shapeHeight++
+						counted = true
+					}
+				}
 			}
 		}
 
+		offset += shapeHeight
+		shapeHeight = 0
+
 		for paddingI := 0; paddingI < hortPadding; paddingI++ {
 			output[offset+tSize+paddingI] = make([]byte, tSize)
+			offset++
 		}
-
 	}
 
 	return output
