@@ -106,7 +106,7 @@ func _renderComing(f *Field) [][]byte {
 		shapeHeight = 0
 
 		for paddingI := 0; paddingI < hortPadding; paddingI++ {
-			output[offset+tSize+paddingI] = make([]byte, tSize)
+			output[offset+paddingI] = make([]byte, tSize)
 			offset++
 		}
 	}
