@@ -21,10 +21,11 @@ func findMax(arguments ...int) int {
 func (f *Field) render() *Field {
 	field := _renderField(f)
 	coming := _renderComing(f)
+	stored := _renderStored(f)
 
-	output := make([][]byte, findMax(len(field), len(coming)))
+	output := make([][]byte, findMax(len(field), len(coming), len(stored)))
 
-	sections := [][][]byte{field, coming}
+	sections := [][][]byte{stored, field, coming}
 
 	prevSectionsLength := 0
 	for _, section := range sections {
@@ -54,6 +55,28 @@ func (f *Field) render() *Field {
 	}
 
 	return f
+}
+
+func _renderStored(f *Field) [][]byte {
+	output := make([][]byte, tSize)
+
+	for i := 0; i < tSize; i++ {
+		output[i] = make([]byte, tSize)
+	}
+
+	if f.stored == (Tetromino{}) {
+		return output
+	}
+
+	for i, row := range f.stored.shape {
+		for j, value := range row {
+			if value {
+				output[i][j] = f.stored.value
+			}
+		}
+	}
+
+	return output
 }
 
 func _renderComing(f *Field) [][]byte {
