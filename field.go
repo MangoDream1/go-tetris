@@ -8,8 +8,6 @@ const fieldHeight = 18
 const fieldWidth = 12
 const maxStored = 5
 
-// const buffer = tSize
-
 type Field struct {
 	state   [fieldHeight][fieldWidth]byte
 	current Tetromino
@@ -17,41 +15,11 @@ type Field struct {
 	coming  []Tetromino
 }
 
-func (f *Field) removeCurrent() *Field {
-	x := int(f.current.x)
-	y := int(f.current.y)
-
-	for i, row := range f.current.shape {
-		for j, value := range row {
-			if value {
-				f.state[i+y][j+x] = byte(0)
-			}
-		}
-	}
-
-	return f
-}
-
-func (f *Field) placeCurrent() *Field {
-	x := int(f.current.x)
-	y := int(f.current.y)
-
-	for i, row := range f.current.shape {
-		for j, value := range row {
-			if value {
-				f.state[i+y][j+x] = f.current.value
-			}
-		}
-	}
-
-	return f
-}
-
 func (f *Field) generateNew() *Field {
 	i := rand.Intn(len(shapes))
 	s := shapes[i]
 
-	f.coming = append(f.coming, Tetromino{s.shape, s.value, fieldWidth/2 - tSize/2, 0})
+	f.coming = append(f.coming, Tetromino{s.shape, s.value, fieldWidth/2 - tSize/2, 0, f})
 
 	return f
 }
@@ -67,7 +35,7 @@ func (f *Field) setCurrent() *Field {
 }
 
 func (f *Field) storeCurrent() *Field {
-	f.removeCurrent()
+	f.current.remove()
 	if (f.stored == Tetromino{}) {
 		f.setCurrent()
 	} else {

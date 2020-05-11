@@ -11,7 +11,9 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	f := Field{}
-	f.init().placeCurrent().render()
+	f.init()
+	f.current.place()
+	f.render()
 
 	ticker := time.Tick(time.Second)
 
@@ -19,9 +21,9 @@ func main() {
 
 	for true {
 		<-ticker
-		f.removeCurrent()
+		f.current.remove()
 		f.current.moveDown()
-		f.placeCurrent()
+		f.current.place()
 
 		f.render()
 

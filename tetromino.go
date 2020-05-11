@@ -10,10 +10,7 @@ type Tetromino struct {
 	value byte
 	x     uint8
 	y     uint8
-}
-
-func indexing(x int8, y int8) int8 {
-	return x + y*tSize
+	field *Field
 }
 
 func (t *Tetromino) rotateLeft() *Tetromino {
@@ -60,3 +57,37 @@ func (t *Tetromino) moveDown() *Tetromino {
 	t.y++
 	return t
 }
+
+func (t *Tetromino) place() *Tetromino {
+	x := int(t.x)
+	y := int(t.y)
+
+	for i, row := range t.shape {
+		for j, value := range row {
+			if value {
+				t.field.state[i+y][j+x] = t.value
+			}
+		}
+	}
+
+	return t
+}
+
+func (t *Tetromino) remove() *Tetromino {
+	x := int(t.x)
+	y := int(t.y)
+
+	for i, row := range t.shape {
+		for j, value := range row {
+			if value {
+				t.field.state[i+y][j+x] = byte(0)
+			}
+		}
+	}
+
+	return t
+}
+
+// func (t *Tetromino) allowedDown(state [fieldHeight][fieldWidth]byte) bool {
+
+// }
