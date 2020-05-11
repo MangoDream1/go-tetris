@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -24,11 +23,9 @@ func (f *Field) removeCurrent() *Field {
 
 	for i, row := range f.current.shape {
 		for j, value := range row {
-			if !value {
-				continue
+			if value {
+				f.state[i+y][j+x] = byte(0)
 			}
-
-			f.state[i+y][j+x] = byte(0)
 		}
 	}
 
@@ -81,46 +78,12 @@ func (f *Field) storeCurrent() *Field {
 }
 
 func (f *Field) init() *Field {
-	for i := 0; i < maxStored-1; i++ {
+	for i := 0; i < maxStored; i++ {
 		f.generateNew()
 	}
 
 	f.setCurrent()
 	f.state = [fieldHeight][fieldWidth]byte{}
-
-	return f
-}
-
-func (f *Field) render() *Field {
-	output := make([][]byte, fieldHeight+1)
-
-	for i, row := range f.state {
-		output[i] = make([]byte, fieldWidth+2)
-
-		// define edges
-		output[i][0] = '|'
-		output[i][fieldWidth+1] = '|'
-
-		for j, b := range row {
-			if b == byte(0) {
-				output[i][j+1] = ' '
-				continue
-			}
-
-			output[i][j+1] = b
-		}
-	}
-
-	// add bottom
-	output[fieldHeight] = make([]byte, fieldWidth+2)
-	for i := 0; i < fieldWidth+2; i++ {
-		output[fieldHeight][i] = '='
-	}
-
-	fmt.Printf("\033[2;0H") // move cursor to second row and draw from there
-	for _, row := range output {
-		fmt.Println(string(row))
-	}
 
 	return f
 }
