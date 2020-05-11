@@ -15,15 +15,17 @@ func main() {
 	f.current.place()
 	f.render()
 
-	ticker := time.Tick(time.Second)
+	ticker := time.Tick(time.Second / 5)
 
 	f.storeCurrent()
 
 	for true {
 		<-ticker
-		f.current.remove()
+		if !f.current.allowedDown() {
+			f.setCurrent()
+		}
+
 		f.current.moveDown()
-		f.current.place()
 
 		f.render()
 
