@@ -67,6 +67,7 @@ func (f *Field) setCurrent() *Field {
 }
 
 func (f *Field) storeCurrent() *Field {
+	f.removeCurrent()
 	if (f.stored == Tetromino{}) {
 		f.setCurrent()
 	} else {
