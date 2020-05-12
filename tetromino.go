@@ -45,7 +45,7 @@ func (t *Tetromino) rotateRight() *Tetromino {
 
 func (t *Tetromino) moveLeft() *Tetromino {
 	t.remove()
-	if _canMove(t, int(t.x+1), int(t.y)) {
+	if t.canMove(-1, 0) {
 		t.x--
 	}
 	t.place()
@@ -55,7 +55,7 @@ func (t *Tetromino) moveLeft() *Tetromino {
 
 func (t *Tetromino) moveRight() *Tetromino {
 	t.remove()
-	if _canMove(t, int(t.x+1), int(t.y)) {
+	if t.canMove(1, 0) {
 		t.x++
 	}
 	t.place()
@@ -100,9 +100,16 @@ func (t *Tetromino) remove() *Tetromino {
 	return t
 }
 
-func _canMove(t *Tetromino, x int, y int) bool {
+func (t *Tetromino) canMove(x int, y int) bool {
+	x = int(t.x) + x
+	y = int(t.y) + y
+
 	for i, row := range t.shape {
 		for j, value := range row {
+			if !value {
+				continue
+			}
+
 			if i+y < 0 || i+y >= len(t.field.state) { // out of bounds top-bottom
 				return false
 			}
@@ -111,7 +118,7 @@ func _canMove(t *Tetromino, x int, y int) bool {
 				return false
 			}
 
-			if value && t.field.state[i+y][j+x] > 0 {
+			if t.field.state[i+y][j+x] > 0 {
 				return false
 			}
 		}
@@ -122,7 +129,7 @@ func _canMove(t *Tetromino, x int, y int) bool {
 
 func (t *Tetromino) allowedDown() bool {
 	t.remove()
-	b := _canMove(t, int(t.x), int(t.y+1))
+	b := t.canMove(0, 1)
 	t.place()
 	return b
 }

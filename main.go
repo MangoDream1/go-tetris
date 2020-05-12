@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -22,10 +23,15 @@ func main() {
 	for true {
 		<-ticker
 		if !f.current.allowedDown() {
-			f.setCurrent()
-		}
+			if f.isGameOver() {
+				fmt.Println("Game over :(")
+				break
+			}
 
-		f.current.moveDown()
+			f.newCurrent()
+		} else {
+			f.current.moveDown()
+		}
 
 		f.render()
 

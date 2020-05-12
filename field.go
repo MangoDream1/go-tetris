@@ -24,7 +24,11 @@ func (f *Field) generateNew() *Field {
 	return f
 }
 
-func (f *Field) setCurrent() *Field {
+func (f *Field) isGameOver() bool {
+	return !f.coming[0].canMove(0, 0) // if next coming cant be rendered game over
+}
+
+func (f *Field) newCurrent() *Field {
 	current, coming := f.coming[0], f.coming[1:]
 	f.current = current
 	f.coming = coming
@@ -37,7 +41,7 @@ func (f *Field) setCurrent() *Field {
 func (f *Field) storeCurrent() *Field {
 	f.current.remove()
 	if (f.stored == Tetromino{}) {
-		f.setCurrent()
+		f.newCurrent()
 	} else {
 		f.current = f.stored
 	}
@@ -51,7 +55,7 @@ func (f *Field) init() *Field {
 		f.generateNew()
 	}
 
-	f.setCurrent()
+	f.newCurrent()
 	f.state = [fieldHeight][fieldWidth]byte{}
 
 	return f
