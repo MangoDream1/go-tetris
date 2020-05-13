@@ -42,11 +42,13 @@ func (f *Field) storeCurrent() *Field {
 	f.current.remove()
 	if (f.stored == Tetromino{}) {
 		f.newCurrent()
+		f.stored = f.current
 	} else {
+		old := f.current
 		f.current = f.stored
+		f.stored = old
 	}
 
-	f.stored = f.current
 	return f
 }
 
