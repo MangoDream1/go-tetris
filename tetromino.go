@@ -64,6 +64,10 @@ func (t *Tetromino) moveRight() *Tetromino {
 }
 
 func (t *Tetromino) moveDown() *Tetromino {
+	if !t.allowedDown() {
+		t.field.newCurrent()
+	}
+
 	t.remove()
 	t.y++
 	t.place()
