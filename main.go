@@ -19,15 +19,13 @@ func main() {
 	}()
 
 	rand.Seed(time.Now().UnixNano())
+	ticker := time.Tick(time.Second)
 
+	// init game
 	f := Field{}
 	f.init()
 	f.current.place()
 	f.render()
-
-	ticker := time.Tick(time.Second / 5)
-
-	f.storeCurrent()
 
 	for {
 		select {
