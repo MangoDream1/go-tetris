@@ -14,6 +14,7 @@ type Tetromino struct {
 }
 
 func (t *Tetromino) rotateLeft() *Tetromino {
+	t.remove()
 	var nShape [tSize][tSize]bool
 
 	for y, row := range t.shape {
@@ -23,11 +24,12 @@ func (t *Tetromino) rotateLeft() *Tetromino {
 	}
 
 	t.shape = nShape
-
+	t.place()
 	return t
 }
 
 func (t *Tetromino) rotateRight() *Tetromino {
+	t.remove()
 	var nShape [tSize][tSize]bool
 
 	for y, row := range t.shape {
@@ -39,7 +41,6 @@ func (t *Tetromino) rotateRight() *Tetromino {
 	}
 
 	t.shape = nShape
-
 	return t
 }
 
@@ -48,7 +49,6 @@ func (t *Tetromino) moveLeft() *Tetromino {
 	if t.canMove(-1, 0) {
 		t.x--
 	}
-	t.place()
 
 	return t
 }
@@ -58,19 +58,19 @@ func (t *Tetromino) moveRight() *Tetromino {
 	if t.canMove(1, 0) {
 		t.x++
 	}
-	t.place()
 
 	return t
 }
 
 func (t *Tetromino) moveDown() *Tetromino {
 	if !t.allowedDown() {
+		t.place()
 		t.field.newCurrent()
+	} else {
+		t.remove()
+		t.y++
 	}
 
-	t.remove()
-	t.y++
-	t.place()
 	return t
 }
 
@@ -134,6 +134,5 @@ func (t *Tetromino) canMove(x int, y int) bool {
 func (t *Tetromino) allowedDown() bool {
 	t.remove()
 	b := t.canMove(0, 1)
-	t.place()
 	return b
 }

@@ -33,6 +33,7 @@ func (f *Field) newCurrent() *Field {
 	f.current = current
 	f.coming = coming
 
+	f.current.place()
 	f.generateNew()
 
 	return f

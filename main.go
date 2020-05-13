@@ -30,19 +30,20 @@ func main() {
 	for {
 		select {
 		case <-ticker:
-			if !f.current.allowedDown() {
-				if f.isGameOver() {
-					fmt.Println("Game over :(")
-					return
-				}
-
-				f.newCurrent()
-			} else {
-				f.current.moveDown()
+			if !f.current.allowedDown() && f.isGameOver() {
+				fmt.Println("Game over :(")
+				return
 			}
 
+			f.current.moveDown()
+			f.current.place()
 			f.render()
 		case event := <-keyEvents:
+			if !f.current.allowedDown() && f.isGameOver() {
+				fmt.Println("Game over :(")
+				return
+			}
+
 			go handleInput(&f, event, quit)
 		case <-quit:
 			fmt.Println("QUITING")
