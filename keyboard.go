@@ -50,4 +50,7 @@ func handleInput(f *Field, event keyboard.KeyEvent, quit chan int) {
 	if event.Key == keyboard.KeySpace {
 		f.current.moveDown() // hard drop
 	}
+
+	f.current.place()
+	f.render()
 }
