@@ -12,6 +12,7 @@ const tSize = 4
 
 func main() {
 	quit := make(chan int)
+	gameover := make(chan int, 1)
 
 	keyEvents := setupKeyboard()
 	defer func() {
@@ -30,24 +31,21 @@ func main() {
 	for {
 		select {
 		case <-ticker:
-			if !f.current.allowedDown() && f.isGameOver() {
-				fmt.Println("Game over :(")
-				return
-			}
-
+			gameover <- 0
 			f.current.moveDown()
 			f.current.place()
 			f.render()
 		case event := <-keyEvents:
-			if !f.current.allowedDown() && f.isGameOver() {
-				fmt.Println("Game over :(")
-				return
-			}
-
+			gameover <- 0
 			go handleInput(&f, event, quit)
 		case <-quit:
 			fmt.Println("QUITING")
 			return
+		case <-gameover:
+			if !f.current.allowedDown() && f.isGameOver() {
+				fmt.Println("Game over :(")
+				return
+			}
 		}
 	}
 }
