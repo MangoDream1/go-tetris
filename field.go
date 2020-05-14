@@ -25,7 +25,7 @@ func (f *Field) generateNew() *Field {
 }
 
 func (f *Field) isGameOver() bool {
-	return !f.coming[0].canMove(0, 0) // if next coming cant be rendered game over
+	return !f.coming[0].canMove(0, 0, &f.current.shape) // if next coming cant be rendered game over
 }
 
 func (f *Field) newCurrent() *Field {

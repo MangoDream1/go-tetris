@@ -9,41 +9,48 @@ type Tetromino struct {
 	field *Field
 }
 
-// FIXME: check if allowed to turn
 // TODO: remove bottom row if filled
 
 func (t *Tetromino) rotateLeft() *Tetromino {
 	t.remove()
-	var nShape [tSize][tSize]bool
 
+	var proposedShape [tSize][tSize]bool
 	for iRow, row := range t.shape {
 		for i := range row {
-			nShape[iRow][tSize-1-i] = t.shape[i][iRow]
+			proposedShape[iRow][tSize-1-i] = t.shape[i][iRow]
 		}
 	}
 
-	t.shape = nShape
+	if !t.canMove(0, 0, &proposedShape) {
+		return t
+	}
+
+	t.shape = proposedShape
 	t.place()
 	return t
 }
 
 func (t *Tetromino) rotateRight() *Tetromino {
 	t.remove()
-	var nShape [tSize][tSize]bool
 
+	var proposedShape [tSize][tSize]bool
 	for iRow, row := range t.shape {
 		for i := range row {
-			nShape[tSize-1-iRow][i] = t.shape[i][iRow]
+			proposedShape[tSize-1-iRow][i] = t.shape[i][iRow]
 		}
 	}
 
-	t.shape = nShape
+	if !t.canMove(0, 0, &proposedShape) {
+		return t
+	}
+
+	t.shape = proposedShape
 	return t
 }
 
 func (t *Tetromino) moveLeft() *Tetromino {
 	t.remove()
-	if t.canMove(-1, 0) {
+	if t.canMove(-1, 0, &t.shape) {
 		t.x--
 	}
 
@@ -52,7 +59,7 @@ func (t *Tetromino) moveLeft() *Tetromino {
 
 func (t *Tetromino) moveRight() *Tetromino {
 	t.remove()
-	if t.canMove(1, 0) {
+	if t.canMove(1, 0, &t.shape) {
 		t.x++
 	}
 
@@ -101,11 +108,11 @@ func (t *Tetromino) remove() *Tetromino {
 	return t
 }
 
-func (t *Tetromino) canMove(x int, y int) bool {
+func (t *Tetromino) canMove(x int, y int, proposedShape *[tSize][tSize]bool) bool {
 	x = int(t.x) + x
 	y = int(t.y) + y
 
-	for i, row := range t.shape {
+	for i, row := range proposedShape {
 		for j, value := range row {
 			if !value {
 				continue
@@ -130,6 +137,6 @@ func (t *Tetromino) canMove(x int, y int) bool {
 
 func (t *Tetromino) allowedDown() bool {
 	t.remove()
-	b := t.canMove(0, 1)
+	b := t.canMove(0, 1, &t.shape)
 	return b
 }
