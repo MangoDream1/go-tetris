@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 // Tetromino building block of tetris
 type Tetromino struct {
 	shape [tSize][tSize]bool
@@ -13,13 +9,16 @@ type Tetromino struct {
 	field *Field
 }
 
+// FIXME: check if allowed to turn
+// TODO: remove bottom row if filled
+
 func (t *Tetromino) rotateLeft() *Tetromino {
 	t.remove()
 	var nShape [tSize][tSize]bool
 
-	for y, row := range t.shape {
-		for x := range row {
-			nShape[tSize-1-y][x] = t.shape[x][y]
+	for iRow, row := range t.shape {
+		for i := range row {
+			nShape[iRow][tSize-1-i] = t.shape[i][iRow]
 		}
 	}
 
@@ -32,11 +31,9 @@ func (t *Tetromino) rotateRight() *Tetromino {
 	t.remove()
 	var nShape [tSize][tSize]bool
 
-	for y, row := range t.shape {
-		for x := range row {
-			fmt.Println(x, y, y, 3-x, t.shape[x][y])
-
-			nShape[tSize-1-x][y] = t.shape[x][y]
+	for iRow, row := range t.shape {
+		for i := range row {
+			nShape[tSize-1-iRow][i] = t.shape[i][iRow]
 		}
 	}
 
