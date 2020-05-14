@@ -51,6 +51,5 @@ func handleInput(f *Field, event keyboard.KeyEvent, quit chan int) {
 		f.current.moveDown() // hard drop
 	}
 
-	f.current.place()
-	f.render()
+	f.tickActions()
 }

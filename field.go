@@ -63,3 +63,36 @@ func (f *Field) init() *Field {
 
 	return f
 }
+
+func (f *Field) tickActions() *Field {
+	f.clearRowIfFilled(0)
+	f.current.place()
+	f.render()
+	f.current.remove()
+	return f
+}
+
+func (f *Field) clearRowIfFilled(iRow int) *Field {
+	if iRow == fieldHeight {
+		return f
+	}
+
+	row := f.state[iRow]
+	isFilled := true
+	for _, value := range row {
+		if value == byte(0) {
+			isFilled = false
+			break
+		}
+	}
+
+	if isFilled {
+		f.current.remove()
+		for i := iRow - 1; i >= 0; i-- {
+			row := f.state[i]
+			f.state[i+1] = row
+		}
+	}
+
+	return f.clearRowIfFilled(iRow + 1)
+}

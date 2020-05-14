@@ -33,8 +33,7 @@ func main() {
 		case <-ticker:
 			gameover <- 0
 			f.current.moveDown()
-			f.current.place()
-			f.render()
+			f.tickActions()
 		case event := <-keyEvents:
 			gameover <- 0
 			go handleInput(&f, event, quit)

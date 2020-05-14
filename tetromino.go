@@ -9,8 +9,6 @@ type Tetromino struct {
 	field *Field
 }
 
-// TODO: remove bottom row if filled
-
 func (t *Tetromino) rotateLeft() *Tetromino {
 	t.remove()
 
@@ -26,7 +24,6 @@ func (t *Tetromino) rotateLeft() *Tetromino {
 	}
 
 	t.shape = proposedShape
-	t.place()
 	return t
 }
 
