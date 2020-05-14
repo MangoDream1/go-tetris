@@ -54,4 +54,4 @@ LEFT
 6 (2,1) => a      (1,1)
 7 (3,1) => b      (1,0)
 
-INITIAL[3-y][x] = LEFT[x][y]
+INITIAL[x][3-y] = LEFT[x][y]
