@@ -4,8 +4,8 @@ package main
 type Tetromino struct {
 	shape [tSize][tSize]bool
 	value byte
-	x     uint8
-	y     uint8
+	x     int8
+	y     int8
 	field *Field
 }
 
@@ -17,7 +17,7 @@ func (t *Tetromino) rotateLeft() *Tetromino {
 	var proposedShape [tSize][tSize]bool
 	for iRow, row := range t.shape {
 		for i := range row {
-			proposedShape[iRow][tSize-1-i] = t.shape[i][iRow]
+			proposedShape[tSize-1-iRow][i] = t.shape[i][iRow]
 		}
 	}
 
@@ -36,7 +36,7 @@ func (t *Tetromino) rotateRight() *Tetromino {
 	var proposedShape [tSize][tSize]bool
 	for iRow, row := range t.shape {
 		for i := range row {
-			proposedShape[tSize-1-iRow][i] = t.shape[i][iRow]
+			proposedShape[iRow][tSize-1-i] = t.shape[i][iRow]
 		}
 	}
 
