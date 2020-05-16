@@ -40,6 +40,7 @@ func main() {
 			fmt.Println("QUITING")
 			return
 		case <-gameover:
+			f.current.remove()
 			if !f.current.allowedDown() && f.isGameOver() {
 				fmt.Println("Game over :(")
 				return
