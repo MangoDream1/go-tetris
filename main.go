@@ -31,8 +31,8 @@ func main() {
 	for {
 		select {
 		case <-ticker:
-			gameover <- 0
 			f.current.moveDown()
+			gameover <- 0
 			f.tickActions()
 		case event := <-keyEvents:
 			gameover <- 0
