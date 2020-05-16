@@ -25,8 +25,7 @@ func main() {
 	// init game
 	f := Field{}
 	f.init()
-	f.current.place()
-	f.render()
+	f.tickActions()
 
 	for {
 		select {
