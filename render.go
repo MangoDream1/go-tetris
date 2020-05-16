@@ -115,9 +115,9 @@ func _renderComing(f *Field) [][]byte {
 }
 
 func _renderField(f *Field) [][]byte {
-	output := make([][]byte, fieldHeight+1)
+	output := make([][]byte, fieldHeight-fieldDropInZone+1)
 
-	for i, row := range f.state {
+	for i, row := range f.state[fieldDropInZone:] {
 		output[i] = make([]byte, fieldWidth+2)
 
 		// define edges
@@ -130,9 +130,9 @@ func _renderField(f *Field) [][]byte {
 	}
 
 	// add bottom
-	output[fieldHeight] = make([]byte, fieldWidth+2)
+	output[fieldHeight-fieldDropInZone] = make([]byte, fieldWidth+2)
 	for i := 0; i < fieldWidth+2; i++ {
-		output[fieldHeight][i] = '='
+		output[fieldHeight-fieldDropInZone][i] = '='
 	}
 
 	return output

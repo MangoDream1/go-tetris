@@ -4,7 +4,8 @@ import (
 	"math/rand"
 )
 
-const fieldHeight = 18
+const fieldDropInZone = 1
+const fieldHeight = 18 + fieldDropInZone
 const fieldWidth = 12
 const maxStored = 5
 
