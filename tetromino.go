@@ -75,6 +75,14 @@ func (t *Tetromino) moveDown() *Tetromino {
 	return t
 }
 
+func (t *Tetromino) hardDrop() *Tetromino {
+	for t.allowedDown() {
+		t.moveDown()
+	}
+	t.moveDown() // set in place
+	return t
+}
+
 func (t *Tetromino) place() *Tetromino {
 	x := int(t.x)
 	y := int(t.y)
