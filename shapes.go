@@ -7,10 +7,10 @@ type initialShape struct {
 
 // long boi
 var shape1 = initialShape{[4][4]bool{
-	{false, false, true, false},
-	{false, false, true, false},
-	{false, false, true, false},
-	{false, false, true, false},
+	{true, false, false, false},
+	{true, false, false, false},
+	{true, false, false, false},
+	{true, false, false, false},
 }, 'L'}
 
 // t boi

@@ -10,13 +10,15 @@ type Tetromino struct {
 }
 
 func (t *Tetromino) rotateLeft() *Tetromino {
-
 	var proposedShape [tSize][tSize]bool
 	for iRow, row := range t.shape {
 		for i := range row {
 			proposedShape[tSize-1-iRow][i] = t.shape[i][iRow]
 		}
 	}
+
+	fixShapeLeft(&proposedShape)
+	fixShapeUp(&proposedShape)
 
 	if !t.canMove(0, 0, &proposedShape) {
 		return t
@@ -27,13 +29,15 @@ func (t *Tetromino) rotateLeft() *Tetromino {
 }
 
 func (t *Tetromino) rotateRight() *Tetromino {
-
 	var proposedShape [tSize][tSize]bool
 	for iRow, row := range t.shape {
 		for i := range row {
 			proposedShape[iRow][tSize-1-i] = t.shape[i][iRow]
 		}
 	}
+
+	fixShapeLeft(&proposedShape)
+	fixShapeUp(&proposedShape)
 
 	if !t.canMove(0, 0, &proposedShape) {
 		return t
