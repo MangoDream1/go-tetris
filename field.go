@@ -20,7 +20,7 @@ func (f *Field) generateNew() *Field {
 	i := rand.Intn(len(shapes))
 	s := shapes[i]
 
-	f.coming = append(f.coming, Tetromino{s.shape, s.value, fieldWidth/2 - tSize/2, 0, f})
+	f.coming = append(f.coming, Tetromino{s.shape, s.value, fieldWidth/2 - tSize/4, 0, f})
 
 	return f
 }
