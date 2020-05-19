@@ -18,7 +18,7 @@ func findMax(arguments ...int) int {
 	return result
 }
 
-func (f *Field) render() *Field {
+func (f *Game) render() *Game {
 	field := _renderField(f)
 	coming := _renderComing(f)
 	stored := _renderStored(f)
@@ -57,7 +57,7 @@ func (f *Field) render() *Field {
 	return f
 }
 
-func _renderStored(f *Field) [][]byte {
+func _renderStored(f *Game) [][]byte {
 	output := make([][]byte, tSize)
 
 	for i := 0; i < tSize; i++ {
@@ -79,7 +79,7 @@ func _renderStored(f *Field) [][]byte {
 	return output
 }
 
-func _renderComing(f *Field) [][]byte {
+func _renderComing(f *Game) [][]byte {
 	output := make([][]byte, maxStored*(tSize+hortPadding))
 
 	offset := 0
@@ -114,10 +114,10 @@ func _renderComing(f *Field) [][]byte {
 	return output
 }
 
-func _renderField(f *Field) [][]byte {
+func _renderField(f *Game) [][]byte {
 	output := make([][]byte, fieldHeight-fieldDropInZone+1)
 
-	for i, row := range f.state[fieldDropInZone:] {
+	for i, row := range f.field[fieldDropInZone:] {
 		output[i] = make([]byte, fieldWidth+2)
 
 		// define edges

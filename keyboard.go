@@ -13,7 +13,7 @@ func setupKeyboard() <-chan keyboard.KeyEvent {
 	return keysEvents
 }
 
-func handleInput(f *Field, event keyboard.KeyEvent, quit chan int) {
+func handleInput(f *Game, event keyboard.KeyEvent, quit chan int) {
 	if event.Err != nil {
 		panic(event.Err)
 	}

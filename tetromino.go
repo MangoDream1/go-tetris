@@ -6,7 +6,7 @@ type Tetromino struct {
 	value byte
 	x     int8
 	y     int8
-	field *Field
+	game  *Game
 }
 
 func (t *Tetromino) rotateLeft() *Tetromino {
@@ -66,7 +66,7 @@ func (t *Tetromino) moveRight() *Tetromino {
 func (t *Tetromino) moveDown() *Tetromino {
 	if !t.allowedDown() {
 		t.place()
-		t.field.newCurrent()
+		t.game.newCurrent()
 	} else {
 		t.y++
 	}
@@ -89,7 +89,7 @@ func (t *Tetromino) place() *Tetromino {
 	for i, row := range t.shape {
 		for j, value := range row {
 			if value {
-				t.field.state[i+y][j+x] = t.value
+				t.game.field[i+y][j+x] = t.value
 			}
 		}
 	}
@@ -104,7 +104,7 @@ func (t *Tetromino) remove() *Tetromino {
 	for i, row := range t.shape {
 		for j, value := range row {
 			if value {
-				t.field.state[i+y][j+x] = byte(0)
+				t.game.field[i+y][j+x] = byte(0)
 			}
 		}
 	}
@@ -122,15 +122,15 @@ func (t *Tetromino) canMove(x int, y int, proposedShape *[tSize][tSize]bool) boo
 				continue
 			}
 
-			if i+y < 0 || i+y >= len(t.field.state) { // out of bounds top-bottom
+			if i+y < 0 || i+y >= len(t.game.field) { // out of bounds top-bottom
 				return false
 			}
 
-			if j+x < 0 || j+x >= len(t.field.state[i+y]) { // out of bounds left-right
+			if j+x < 0 || j+x >= len(t.game.field[i+y]) { // out of bounds left-right
 				return false
 			}
 
-			if t.field.state[i+y][j+x] > 0 {
+			if t.game.field[i+y][j+x] > 0 {
 				return false
 			}
 		}

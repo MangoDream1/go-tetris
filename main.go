@@ -23,7 +23,7 @@ func main() {
 	ticker := time.Tick(time.Second)
 
 	// init game
-	f := Field{}
+	f := Game{}
 	f.init()
 	f.tickActions()
 
@@ -42,12 +42,12 @@ func main() {
 		case <-gameover:
 			f.current.remove()
 
-			if f.isGameWon() {
+			if f.isWon() {
 				fmt.Printf("Game won! Congrats! %v", f.time.duration.String())
 				return
 			}
 
-			if !f.current.allowedDown() && f.isGameOver() {
+			if !f.current.allowedDown() && f.isLost() {
 				fmt.Println("Game over :(")
 				return
 			}

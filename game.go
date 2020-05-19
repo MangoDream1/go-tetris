@@ -17,8 +17,9 @@ type duration struct {
 	duration  time.Duration
 }
 
-type Field struct {
-	state   [fieldHeight][fieldWidth]byte
+// Game holds the game state and logic components
+type Game struct {
+	field   [fieldHeight][fieldWidth]byte
 	current Tetromino
 	stored  Tetromino
 	coming  []Tetromino
@@ -26,7 +27,7 @@ type Field struct {
 	time    duration
 }
 
-func (f *Field) generateNew() *Field {
+func (f *Game) generateNew() *Game {
 	i := rand.Intn(len(shapes))
 	s := shapes[i]
 
@@ -35,7 +36,7 @@ func (f *Field) generateNew() *Field {
 	return f
 }
 
-func (f *Field) isGameWon() bool {
+func (f *Game) isWon() bool {
 	hasWon := f.cleared >= winLinesCleared
 
 	if hasWon {
@@ -47,11 +48,11 @@ func (f *Field) isGameWon() bool {
 	return hasWon
 }
 
-func (f *Field) isGameOver() bool {
+func (f *Game) isLost() bool {
 	return !f.coming[0].canMove(0, 0, &f.coming[0].shape) // if next coming cant be rendered game over
 }
 
-func (f *Field) newCurrent() *Field {
+func (f *Game) newCurrent() *Game {
 	current, coming := f.coming[0], f.coming[1:]
 	f.current = current
 	f.coming = coming
@@ -62,7 +63,7 @@ func (f *Field) newCurrent() *Field {
 	return f
 }
 
-func (f *Field) storeCurrent() *Field {
+func (f *Game) storeCurrent() *Game {
 	f.current.remove()
 	if (f.stored == Tetromino{}) {
 		f.newCurrent()
@@ -76,19 +77,19 @@ func (f *Field) storeCurrent() *Field {
 	return f
 }
 
-func (f *Field) init() *Field {
+func (f *Game) init() *Game {
 	for i := 0; i < maxStored; i++ {
 		f.generateNew()
 	}
 
 	f.newCurrent()
-	f.state = [fieldHeight][fieldWidth]byte{}
+	f.field = [fieldHeight][fieldWidth]byte{}
 	f.time.startTime = time.Now()
 
 	return f
 }
 
-func (f *Field) tickActions() *Field {
+func (f *Game) tickActions() *Game {
 	f.clearRowIfFilled(0)
 	f.current.place()
 	f.render()
@@ -96,12 +97,12 @@ func (f *Field) tickActions() *Field {
 	return f
 }
 
-func (f *Field) clearRowIfFilled(iRow int) *Field {
+func (f *Game) clearRowIfFilled(iRow int) *Game {
 	if iRow == fieldHeight {
 		return f
 	}
 
-	row := f.state[iRow]
+	row := f.field[iRow]
 	isFilled := true
 	for _, value := range row {
 		if value == byte(0) {
@@ -113,8 +114,8 @@ func (f *Field) clearRowIfFilled(iRow int) *Field {
 	if isFilled {
 		f.current.remove()
 		for i := iRow - 1; i >= 0; i-- {
-			row := f.state[i]
-			f.state[i+1] = row
+			row := f.field[i]
+			f.field[i+1] = row
 		}
 		f.cleared++
 	}
