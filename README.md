@@ -1,6 +1,6 @@
 # go-tetris
 
-Tetris sprint 40 lines build in go. Corona quaratine project
+Command line Tetris sprint 40 lines build in go. Corona quaratine project
 
 ```
 BB  |            |  T 
