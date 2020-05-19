@@ -2,18 +2,28 @@ package main
 
 import (
 	"math/rand"
+	"time"
 )
 
 const fieldDropInZone = 1
 const fieldHeight = 18 + fieldDropInZone
 const fieldWidth = 12
 const maxStored = 5
+const winLinesCleared = 40
+
+type duration struct {
+	startTime time.Time
+	endTime   time.Time
+	duration  time.Duration
+}
 
 type Field struct {
 	state   [fieldHeight][fieldWidth]byte
 	current Tetromino
 	stored  Tetromino
 	coming  []Tetromino
+	cleared int8
+	time    duration
 }
 
 func (f *Field) generateNew() *Field {
@@ -23,6 +33,18 @@ func (f *Field) generateNew() *Field {
 	f.coming = append(f.coming, Tetromino{s.shape, s.value, fieldWidth/2 - tSize/4, 0, f})
 
 	return f
+}
+
+func (f *Field) isGameWon() bool {
+	hasWon := f.cleared >= winLinesCleared
+
+	if hasWon {
+		f.time.endTime = time.Now()
+		f.time.duration = f.time.endTime.Sub(f.time.startTime).Round(time.Millisecond)
+
+	}
+
+	return hasWon
 }
 
 func (f *Field) isGameOver() bool {
@@ -61,6 +83,7 @@ func (f *Field) init() *Field {
 
 	f.newCurrent()
 	f.state = [fieldHeight][fieldWidth]byte{}
+	f.time.startTime = time.Now()
 
 	return f
 }
@@ -93,6 +116,7 @@ func (f *Field) clearRowIfFilled(iRow int) *Field {
 			row := f.state[i]
 			f.state[i+1] = row
 		}
+		f.cleared++
 	}
 
 	return f.clearRowIfFilled(iRow + 1)

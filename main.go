@@ -41,6 +41,12 @@ func main() {
 			return
 		case <-gameover:
 			f.current.remove()
+
+			if f.isGameWon() {
+				fmt.Printf("Game won! Congrats! %v", f.time.duration.String())
+				return
+			}
+
 			if !f.current.allowedDown() && f.isGameOver() {
 				fmt.Println("Game over :(")
 				return
